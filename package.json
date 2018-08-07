@@ -6,17 +6,15 @@
   "scripts": {
     "start": "electron ."
   },
-  "repository": "https://github.com/electron/electron-quick-start",
-  "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
-  ],
+  "repository": "https://github.com/adityapareek18/BSRApp",
   "author": "GitHub",
   "license": "CC0-1.0",
   "devDependencies": {
     "electron": "^2.0.0"
+  },
+  "dependencies": {
+    "install": "^0.12.1",
+    "npm": "^6.3.0",
+    "xlsx": "^0.13.3"
   }
 }
