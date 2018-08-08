@@ -4,6 +4,14 @@
 const {app, BrowserWindow} = require('electron');
 const { dialog } = require('electron').remote;
 var xlsx  = require('xlsx');
+require('./reportService');
+var exec = require('child_process').exec, child;
+
+function Bill(billNo, clientName) {
+    this.billNo = billNo;
+    this.clientName = clientName;
+    this.particulars = [];
+}
 
 function getFile() {
     dialog.showOpenDialog({
@@ -19,16 +27,35 @@ function getFile() {
     )
 }
 
-function readWorkbook(file) {
-    var workbook = xlsx.readFile(file);
-}
-
 function generateBills() {
    console.log((localStorage.getItem("excelFile")));
     var workbook = xlsx.readFile(localStorage.getItem("excelFile"));
     var sheet_name_list = workbook.SheetNames;
     var xlData = xlsx.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
-    console.log(xlData);
+    var bills = createBills(xlData);
+}
+
+function createBills(records) {
+    var uniqueBillNos = [];
+    var bills = [];
+    let currentBillNo = 0;
+    records.forEach(record => {
+        if(currentBillNo == record["Bill No."]) {
+            bill = bills.find(function(bill) {
+                return (bill.billNo == currentBillNo);
+            });
+            bill.particulars.push(record["L.R. No."]);
+        }
+        else {
+        var bill = new Bill();
+        currentBillNo = record["Bill No."]
+        bill.billNo = currentBillNo;
+        bill.clientName = record["Consignee"];
+        bill.particulars.push(record["L.R. No."]);
+        bills.push(bill);
+        }
+    });
+    return bills;
 }
 
 document.querySelector('#selectBtn').addEventListener('click', getFile);

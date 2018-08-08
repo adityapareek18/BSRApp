@@ -15,6 +15,7 @@
   "dependencies": {
     "install": "^0.12.1",
     "npm": "^6.3.0",
+    "phantomjs": "^2.1.7",
     "xlsx": "^0.13.3"
   }
 }
