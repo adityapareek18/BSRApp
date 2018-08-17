@@ -2,23 +2,20 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Hello World!</title>
+    <title>BILL GENERATOR</title>
+    <link rel="stylesheet" type="text/css" href="./css/app.css"></link>
   </head>
   <body>
-    <h1>Hello World!</h1>
     <!-- All of the Node.js APIs are available in this renderer process. -->
-    We are using Node.js <script>document.write(process.versions.node)</script>,
-    Chromium <script>document.write(process.versions.chrome)</script>,
-    and Electron <script>document.write(process.versions.electron)</script>.
-
     <div>
-      <input type="button" id="selectBtn" value="Select File" />
+      <img class="logo" src="./img/logo.PNG" />
     </div>
-
-    <div>
-      <input type="button" id="generateBtn" value="Gnererate Bills" />
+    <br/><br/><br/>
+    <div class="buttonGroup">
+      <input class="button button1" type="button" id="openBtn" value="Download Template" />
+      <input class="button button2" type="button" id="selectBtn" value="Select Filled File" />
+      <input class="button button3" type="button" id="generateBtn" value="Gnererate Bills" />
     </div>
-
     <script>
       // You can also require other files to run in this process
       require('./renderer.js')

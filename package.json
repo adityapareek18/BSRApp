@@ -1,7 +1,7 @@
 {
-  "name": "electron-quick-start",
+  "name": "bill-generator",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "description": "Application to generate bills from data",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
@@ -13,9 +13,9 @@
     "electron": "^2.0.0"
   },
   "dependencies": {
+    "electron-packager": "^12.1.0",
+    "exceljs": "^1.6.0",
     "install": "^0.12.1",
-    "npm": "^6.3.0",
-    "phantomjs": "^2.1.7",
-    "xlsx": "^0.13.3"
+    "npm": "^6.3.0"
   }
 }

@@ -1,0 +1,21 @@
+{
+  "name": "bill-generator",
+  "version": "1.0.0",
+  "description": "Application to generate bills from data",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "https://github.com/adityapareek18/BSRApp",
+  "author": "GitHub",
+  "license": "CC0-1.0",
+  "devDependencies": {
+    "electron": "^2.0.0"
+  },
+  "dependencies": {
+    "electron-packager": "^12.1.0",
+    "exceljs": "^1.6.0",
+    "install": "^0.12.1",
+    "npm": "^6.3.0"
+  }
+}
