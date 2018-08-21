@@ -40,10 +40,10 @@ function extractData(dataSheet) {
         if (rowNum > 1) {
             var record = {};
             var i = 1;
-            row.values.forEach(function (element) {
-                record[headerRow[i]] = element;
-                i++;
-            });
+			row.eachCell({ includeEmpty: true }, function(cell, colNumber) {
+				record[headerRow[i]] = cell.value;
+				i++;
+			});
             dataRecords.push(record);
         }
     });
@@ -55,8 +55,8 @@ function generateBills() {
         properties: ['openDirectory']
     }, function (file) {
         if (file !== undefined) {
-            generateBillsAtDest(file);
-            localStorage.clear();
+			localStorage.setItem("dest", file);
+            generateBillsAtDest();
         }
         else {
             dialog.showMessageBox({ message: "Please select the directory." });
@@ -65,7 +65,7 @@ function generateBills() {
     )
 }
 
-function generateBillsAtDest(dir) {
+function generateBillsAtDest() {
     var workbook = new Excel.Workbook();
     workbook.xlsx.readFile(localStorage.getItem("excelFile"))
         .then(wb => {
@@ -75,6 +75,7 @@ function generateBillsAtDest(dir) {
             bills.forEach(function (bill) {
                 generateExcelBill(bill);
             });
+			var dir = localStorage.getItem("dest");
             alert("Bills have been successfully generated at "+dir+" folder");
         });
 }
@@ -87,16 +88,16 @@ function createBillObjects(records) {
             bill = bills.find(function (bill) {
                 return (bill.billNo == currentBillNo);
             });
-            bill.particulars.push(new Particular(record["Nature of Goods"], record["L.R. No."],
-                record["Date"], record["Qty."], record["Value of Goods"]));
+		bill.particulars.push(new Particular(record["Particular"], record["L.R. No."],
+                record["Date"], record["Qty."], record["Amount"]));
         }
         else {
             var bill = new Bill();
             currentBillNo = record["Bill No."]
             bill.billNo = currentBillNo;
             bill.clientName = record["Consignee"];
-            bill.particulars.push(new Particular(record["Nature of Goods"], record["L.R. No."],
-                record["Date"], record["Qty."], record["Value of Goods"]));
+            bill.particulars.push(new Particular(record["Particular"], record["L.R. No."],
+                record["Date"], record["Qty."], record["Amount"]));
             bills.push(bill);
         }
     });
@@ -146,7 +147,7 @@ function setContent(dataSheet, bill) {
     dataSheet.getCell('A11').value = "M/s:  " + bill.clientName;
     dataSheet.getCell('D11').value = "Bill No.:  " + bill.billNo;
     dataSheet.getCell('A14').value = "GSTN No.:  ";
-    dataSheet.getCell('D14').value = "Date:  " + new Date();
+    dataSheet.getCell('D14').value = "Date:  " + getLastDateOfMonth();
     var j = 0;
     var sumOfPerticulars = 0;
     for (var i = 17; i <= 39; i++) {
@@ -168,8 +169,8 @@ function openFile() {
         properties: ['openDirectory']
     }, function (file) {
         if (file !== undefined) {
-            var excelDataFile = fs.readFileSync("./ordersSheet.xlsx");
-            fs.writeFileSync(file + "\\"+"ordersSheet.xlsx", excelDataFile);
+            var excelDataFile = fs.readFileSync("./orders.xlsx");
+            fs.writeFileSync(file + "\\"+"orders.xlsx", excelDataFile);
             alert("Data File with sample data has Been generated at following location. \n" + file);
         }
         else {
@@ -178,6 +179,15 @@ function openFile() {
     }
     )
 }
+
+function getLastDateOfMonth(){
+	var currentTime = new Date();
+	var todayMonth = currentTime.getMonth() + 1;
+	var toDay = currentTime.getDate();
+	var todayYear = currentTime.getFullYear();
+	var lDM = new Date((new Date(todayYear, todayMonth,1))-1);
+	return lDM.getDate() + "/" + lDM.getMonth() + "/" + lDM.getFullYear();
+ }
 
 document.querySelector('#openBtn').addEventListener('click', openFile);
 document.querySelector('#selectBtn').addEventListener('click', getFile);
